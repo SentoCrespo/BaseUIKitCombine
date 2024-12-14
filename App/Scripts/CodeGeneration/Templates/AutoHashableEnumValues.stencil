@@ -1,0 +1,28 @@
+// swiftlint:disable all
+
+// MARK: - AutoHashableEnumValues for Enums
+
+{% for type in types.types|enum where type.implements.AutoHashableEnumValues or type|annotated:"AutoHashableEnumValues" %}
+// MARK: - {{ type.name }} AutoHashableEnumValues
+extension {{ type.name }}: Hashable {
+
+    {{ type.accessLevel }} func hash(into hasher: inout Hasher) {
+        switch self {
+            {% for case in type.cases %}
+                    case .{{ case.name }}{% if case.hasAssociatedValue %}({% for associatedValue in case.associatedValues %}let value{{ forloop.counter }}{% if not forloop.last %}{% if case.associatedValues.count > 1 %},{% endif %}{% endif %}{% endfor %}){% endif %}:
+                        
+                        {{ forloop.counter }}.hash(into: &hasher)
+                        
+                        {% for associatedValue in case.associatedValues %}
+                            {% if associatedValue.typeName.name == "Error" %}
+                        "\(value{{ forloop.counter }})".hash(into: &hasher)
+                            {% else %}
+                        value{{ forloop.counter }}.hash(into: &hasher)
+                            {% endif %}
+                        {% endfor %}
+                        
+            {% endfor %}
+        }
+    }
+}
+{% endfor %}

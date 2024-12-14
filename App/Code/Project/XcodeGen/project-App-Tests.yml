@@ -1,0 +1,55 @@
+ # ---------------------------------
+ # Project Test target
+ # ---------------------------------
+
+ targets: 
+   ProjectTests:
+     
+     ## Properties
+     platform: iOS
+     type: bundle.unit-test
+     
+     ## Sources
+     sources:
+       ### Target files
+       - path: Project
+         includes:
+           - "**/*_SPEC*.swift"
+           
+       - path: ProjectTests
+         includes:
+           - "**/*.swift"
+       
+       ### Don't link info.plist
+       - path: ProjectTests
+         includes:
+           - OtherResources/Info.plist
+         buildPhase: none
+         
+#       - path: Project
+#         excludes:
+#           - OtherResources/Info.plist
+           
+     ## Settings
+     settings:
+       base:
+         SDKROOT: iphoneos
+         PRODUCT_NAME: ProjectTests
+         BUNDLE_LOADER: "$(TEST_HOST)"
+         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Project.app/Project"
+         PRODUCT_BUNDLE_IDENTIFIER: com.sento.project.tests
+         INFOPLIST_FILE: $(SRCROOT)/ProjectTests/OtherResources/Info.plist
+         CLANG_ENABLE_MODULES: YES
+         USER_HEADER_SEARCH_PATHS: ../AppSpecialisation/ExternSource
+         SKIP_INSTALL: YES
+        
+     ## Dependencies
+     dependencies:
+       
+       ### Local Swift Packages
+       
+       ### Other targets
+       - target: Project
+
+       - target: SharedUtilsTests
+         embed: false

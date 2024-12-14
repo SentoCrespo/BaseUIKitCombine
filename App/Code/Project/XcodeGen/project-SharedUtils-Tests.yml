@@ -1,0 +1,43 @@
+# ---------------------------------
+# Domain Test target
+# ---------------------------------
+
+targets: 
+  SharedUtilsTests:
+
+    ## Properties
+    platform: iOS
+    type: framework
+    gatherCoverageData: false 
+
+    ## Sources
+    sources: 
+
+      ### Target files
+      - path: SharedUtils
+        includes:
+          - Tests
+          - "**/*_SPEC*.swift"
+
+    ## Settings
+    settings:
+      base:
+        SDKROOT: iphoneos
+        INFOPLIST_FILE: $(SRCROOT)/SharedUtils/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.sento.project.sharedUtils.tests
+        USER_HEADER_SEARCH_PATHS: ../ProjectSpecialisation/ExternSource
+        PRODUCT_NAME: SharedUtilsTests
+        SKIP_INSTALL: YES
+
+    ## Dependencies
+    dependencies:
+
+      ### iOS SDKs
+      - sdk: Foundation.framework
+      - sdk: XCTest.framework
+      - sdk: Testing.framework
+      - sdk: Combine.framework
+
+      ### Other targets
+      - target: SharedUtils
+        embed: false

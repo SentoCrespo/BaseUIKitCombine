@@ -1,0 +1,24 @@
+// Created by Sento Crespo - 2020
+{% for type in types.all|annotated:"AutoInit" %}{#
+#}{% set spacing %}{% if type.parentName %}    {% endif %}{% endset %}{#
+#}// sourcery:inline:auto:{{ type.name }}.AutoInit
+{{spacing}}    // MARK: - Life Cycle
+{{spacing}}    {{ type.accessLevel }} init({#
+#}{% for variable in type.variables|stored %}{#
+#}{% if not variable.annotations.skipInit %}
+{{spacing}}        {{ variable.name }}: {{ variable.typeName }}{#
+{{spacing}}                    #}{% if variable.isOptional %}{#
+{{spacing}}                        #} = nil{#
+{{spacing}}                    #}{% endif %}{#
+{{spacing}}                    #}{{ ',' if not forloop.last }}{#
+{{spacing}}            #}{% endif %}
+{{spacing}}        {% endfor %}) {
+    {% for variable in type.variables|stored %}
+        {% if not variable.annotations.skipInit %}
+{{ spacing }}		self.{{ variable.name }} = {{ variable.name }}{#
+        #}{% endif %}
+    {% endfor %}
+{{ spacing }}	}
+// sourcery:end
+
+{% endfor %}

@@ -1,0 +1,50 @@
+# ---------------------------------
+# Data Test target
+# ---------------------------------
+
+targets: 
+  DataTests:
+
+    ## Properties
+    platform: iOS
+    type: bundle.unit-test
+    gatherCoverageData: false 
+
+    ## Sources
+    sources: 
+
+      ### Target files
+      - path: Data
+        includes:
+          - Tests
+          - "**/*_SPEC*.swift"
+        excludes:
+          - Info.plist
+      
+    ## Settings
+    settings:
+      base:
+        SDKROOT: iphoneos
+        INFOPLIST_FILE: $(SRCROOT)/Data/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.sento.project.data.tests
+        USER_HEADER_SEARCH_PATHS: ../ProjectSpecialisation/ExternSource
+        PRODUCT_NAME: DataTests
+        USER_HEADER_SEARCH_PATHS: ../ProjectSpecialisation/ExternSource
+        SKIP_INSTALL: YES
+
+    ## Dependencies
+    dependencies:
+
+      ### iOS SDKs
+      - sdk: Foundation.framework
+      - sdk: Testing.framework
+
+      ### Other targets
+      - target: Data
+        embed: false
+        
+      - target: Domain
+        embed: false
+      
+      - target: SharedUtilsTests
+        embed: false

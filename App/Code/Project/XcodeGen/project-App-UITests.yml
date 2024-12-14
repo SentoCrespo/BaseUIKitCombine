@@ -1,0 +1,46 @@
+ # ---------------------------------
+ # Project UI Test target
+ # ---------------------------------
+
+ targets: 
+   ProjectUITests:
+
+     ## Scheme
+     scheme:
+       testTargets:
+         - ProjectUITests
+
+     ## Properties
+     platform: iOS
+     type: bundle.ui-testing
+     gatherCoverageData: true
+
+     ## Sources
+     sources: 
+       - ProjectUITests
+
+       ### Don't link info.plist
+       - path: ProjectTests
+         excludes:
+           - OtherResources/Info.plist
+       - path: ProjectTests
+         includes:
+           - OtherResources/Info.plist
+         buildPhase: none
+
+     ## Settings
+     settings:
+       base:
+         SDKROOT: iphoneos
+         PRODUCT_NAME: ProjectUITests
+         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/ProjectSharing.app/Project"
+         INFOPLIST_FILE: $(SRCROOT)/ProjectUITests/Info.plist
+         CLANG_ENABLE_MODULES: YES
+         USER_HEADER_SEARCH_PATHS: ../CarSharingSpecialisation/ExternSource
+         SKIP_INSTALL: YES
+        
+     ## Dependencies
+     dependencies:
+
+       ### Other targets
+       - target: Project     
